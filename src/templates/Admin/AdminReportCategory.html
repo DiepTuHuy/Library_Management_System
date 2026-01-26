@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Category Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --accent-blue: #007bff;
+            --dark-black: #262626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header & Nav (Nhất quán UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid #e0e0e0; display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 30px; }
+        .nav-item { padding: 8px 30px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+        .stat-small-card { background: var(--white); padding: 20px; border-radius: 25px; border: 1px solid #e0e0e0; }
+        .stat-small-card h4 { font-size: 16px; color: #000; margin-bottom: 10px; }
+
+        /* Main Grid */
+        .report-main-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Sidebar */
+        .report-sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .side-btn {
+            background: var(--white); border: 1px solid #e0e0e0; padding: 15px;
+            border-radius: 20px; text-align: center; font-size: 16px;
+            font-weight: 500; cursor: pointer; color: #555;
+        }
+        .side-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+        /* Chart Area */
+        .chart-container {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            min-height: 400px;
+        }
+
+        .chart-wrapper { width: 300px; height: 300px; }
+        
+        /* Custom Legend List */
+        .legend-list { list-style: none; width: 300px; }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            border-radius: 2px;
+        }
+        .label-text { flex-grow: 1; }
+        .turn-text { color: #555; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">📖</div>
+            <div>
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Librarian Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <div class="nav-bar">
+        <a href="#" class="nav-item">Overview</a>
+        <a href="#" class="nav-item">Borrowing books</a>
+        <a href="#" class="nav-item">Returning books</a>
+        <a href="#" class="nav-item">Manage books</a>
+        <a href="#" class="nav-item active">Report</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-small-card"><h4>Borrows This Month</h4><p>200</p></div>
+        <div class="stat-small-card"><h4>Returns This Month</h4><p>500</p></div>
+        <div class="stat-small-card"><h4>Late</h4><p>50</p></div>
+        <div class="stat-small-card"><h4>Fines Collected</h4><p>12</p></div>
+    </div>
+
+    <div class="report-main-grid">
+        <div class="report-sidebar">
+            <div class="side-btn">Borrow / return</div>
+            <div class="side-btn active">Category</div>
+            <div class="side-btn">Top Books</div>
+            <div class="side-btn">Late</div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-wrapper">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            
+            <ul class="legend-list">
+                <li class="legend-item"><div class="color-box" style="background: #007bff;"></div> <span class="label-text">Category 1</span> <span class="turn-text">25 turns</span></li>
+                <li class="legend-item"><div class="color-box" style="background: #ff3366;"></div> <span class="label-text">Category 2</span> <span class="turn-text">25 turns</span></li>
+                <li class="legend-item"><div class="color-box" style="background: #2ecc71;"></div> <span class="label-text">Category 3</span> <span class="turn-text">50 turns</span></li>
+                <li class="legend-item"><div class="color-box" style="background: #d4a373;"></div> <span class="label-text">Category 4</span> <span class="turn-text">50 turns</span></li>
+                <li class="legend-item"><div class="color-box" style="background: #ffcc00;"></div> <span class="label-text">Category 5</span> <span class="turn-text">50 turns</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'],
+                datasets: [{
+                    data: [25, 25, 50, 50, 50],
+                    backgroundColor: ['#007bff', '#ff3366', '#2ecc71', '#d4a373', '#ffcc00'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false } // Tắt legend mặc định để dùng list tùy chỉnh bên cạnh
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

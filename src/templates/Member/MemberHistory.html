@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --border-color: #e0e0e0;
+            --success-green: #2ecc71;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+
+        body {
+            background-color: #f1f3f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container chính của thẻ trạng thái trả sách */
+        .return-status-card {
+            background-color: var(--white);
+            width: 450px;
+            border-radius: 30px; /* Bo góc 30px đồng nhất thẻ Borrowing */
+            padding: 25px 35px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Header: Logo và Thông tin sách */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mini-logo-circle {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 26px;
+        }
+
+        .title-group h4 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .title-group p {
+            font-size: 15px;
+            color: var(--gray-text);
+        }
+
+        /* Phần nội dung trạng thái và tiền phạt */
+        .status-info-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-left: 70px; /* Căn lề thẳng với phần text phía trên */
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .info-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+            width: 80px;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .fine-value {
+            color: var(--success-green);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="return-status-card">
+        <div class="card-header">
+            <div class="mini-logo-circle">📖</div>
+            <div class="title-group">
+                <h4>Book Name</h4>
+                <p>Author Name</p>
+            </div>
+        </div>
+
+        <div class="status-info-container">
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-value">On time / Late</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Fine</span>
+                <span class="info-value fine-value">0 VND</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

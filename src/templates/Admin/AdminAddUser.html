@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --white: #ffffff;
+            --gray-border: #d1d5db;
+            --gray-input: #ffffff;
+            --btn-blue: #007bff;
+            --text-black: #000000;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+
+        body {
+            background-color: #0b141a; /* Giả lập lớp overlay tối màu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Khung Modal chính */
+        .add-user-modal {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 40px; /* Bo góc cực lớn đồng bộ với toàn hệ thống */
+            padding: 30px 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-black);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #f0f0f0;
+            margin-bottom: 25px;
+        }
+
+        /* Form Layout */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-black);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--gray-border);
+            border-radius: 20px; /* Bo góc nhẹ cho input */
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--btn-blue);
+        }
+
+        /* Nút bấm */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .btn-add {
+            background-color: var(--btn-blue);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            color: var(--text-black);
+            border: 1px solid var(--gray-border);
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="add-user-modal">
+        <h3 class="modal-title">Add new user</h3>
+        <hr>
+
+        <form>
+            <div class="form-group">
+                <label for="fullname">Full name</label>
+                <input type="text" id="fullname">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <input type="text" id="role">
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-add">Add</button>
+                <button type="button" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

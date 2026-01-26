@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Successful - Member Dashboard</title>
+    <style>
+        :root {
+            --white: #ffffff;
+            --accent-blue: #007bff;
+            --text-black: #000000;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+
+        body {
+            background-color: #0b141a; /* Giả lập lớp overlay tối màu phía sau modal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Khung thông báo chính */
+        .success-modal {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 40px; /* Bo góc lớn đồng nhất toàn hệ thống */
+            padding: 40px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        /* Icon logo nhỏ phía trên */
+        .success-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(255, 126, 1, 0.2);
+        }
+
+        /* Nội dung thông báo */
+        .success-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-black);
+            margin-top: 5px;
+        }
+
+        /* Nút xác nhận tiếp tục */
+        .continue-btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 60px; /* Nút thon dài như trong ảnh */
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            margin-top: 10px;
+        }
+
+        .continue-btn:hover {
+            opacity: 0.9;
+        }
+
+        .continue-btn:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-modal">
+        <div class="success-logo">📖</div>
+
+        <h2 class="success-title">Request Successful</h2>
+
+        <button class="continue-btn">Continue</button>
+    </div>
+
+</body>
+</html>

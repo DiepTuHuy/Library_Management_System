@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header Section */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 30px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Navigation (4 mục cho Admin) */
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; transition: 0.3s; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Stats Row (Thống kê Admin) */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            min-height: 140px;
+        }
+        .stat-card h4 { font-size: 18px; color: #000; margin-bottom: 10px; }
+        .stat-card p { font-size: 16px; color: var(--gray-text); font-weight: 500; }
+
+        /* Quick Access Section (Phần dưới cùng) */
+        .quick-access-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 40px;
+            padding: 60px 40px;
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .action-box {
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #000;
+        }
+
+        .action-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-color: #ffae3d;
+        }
+
+        .action-box i { font-size: 45px; color: #000; }
+        .action-box span { font-size: 18px; font-weight: 500; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">📖</div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <div class="nav-bar">
+        <a href="#" class="nav-item active">Overview</a>
+        <a href="#" class="nav-item">Manage User</a>
+        <a href="#" class="nav-item">Manage Books</a>
+        <a href="#" class="nav-item">Reports</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <h4>Total of User</h4>
+            <p>234</p>
+        </div>
+        <div class="stat-card">
+            <h4>Total of Books</h4>
+            <p>1,234</p>
+        </div>
+        <div class="stat-card">
+            <h4>Borrowed</h4>
+            <p>123</p>
+        </div>
+        <div class="stat-card">
+            <h4>Overdue</h4>
+            <p>12</p>
+        </div>
+    </div>
+
+    <div class="quick-access-container">
+        <a href="#" class="action-box">
+            <i class="fa-regular fa-circle-user"></i>
+            <span>Manage User</span>
+        </a>
+        <a href="#" class="action-box">
+            <i class="fa-solid fa-book"></i>
+            <span>Manage Books</span>
+        </a>
+        <a href="#" class="action-box">
+            <i class="fa-regular fa-file-lines"></i>
+            <span>View Report</span>
+        </a>
+    </div>
+
+</body>
+</html>

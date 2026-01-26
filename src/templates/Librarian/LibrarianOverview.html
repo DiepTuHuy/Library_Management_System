@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System UI</title>
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f1f3f6; /* Màu xám nhạt của nền */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* Header Container */
+        .header-container {
+            background: white;
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px 30px;
+            border-radius: 25px; /* Bo góc lớn cho khung header */
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-box {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(to bottom, #ffae3d, #ff7e01);
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(255, 126, 1, 0.2);
+        }
+
+        /* Icon sách giả lập */
+        .book-icon {
+            width: 35px;
+            height: 25px;
+            border: 3px solid white;
+            border-top: none;
+            position: relative;
+        }
+        .book-icon::after {
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background: white;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .title-group h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 2px;
+        }
+
+        .title-group p {
+            font-size: 16px;
+            color: #7a7a7a;
+        }
+
+        .sign-out-btn {
+            background-color: #262626;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            background-color: #d1d5db;
+            padding: 6px;
+            border-radius: 40px;
+            display: flex;
+            margin-bottom: 50px;
+        }
+
+        .nav-item {
+            padding: 10px 35px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+
+        .nav-item.active {
+            background-color: white;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            flex: 1;
+            min-width: 300px;
+            max-width: 340px;
+            height: 420px;
+            border-radius: 40px; /* Bo góc cực đại đúng như UI */
+            border: 1px solid #e0e0e0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .card-title {
+            color: #8c8c8c;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .card-number {
+            font-size: 100px; /* Số rất lớn như trong ảnh */
+            font-weight: 500;
+            color: #000;
+        }
+
+        .card-footer {
+            color: #8c8c8c;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .card-footer.red {
+            color: #ff4d4f; /* Màu đỏ cảnh báo */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="icon-box">
+                <div class="book-icon"></div>
+            </div>
+            <div class="title-group">
+                <h1>Library Management System</h1>
+                <p>Librarian Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <div class="nav-bar">
+        <a href="#" class="nav-item active">Overview</a>
+        <a href="#" class="nav-item">Borrowing books</a>
+        <a href="#" class="nav-item">Returning books</a>
+        <a href="#" class="nav-item">Manage books</a>
+        <a href="#" class="nav-item">Report</a>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-title">Borrowing books Today</div>
+            <div class="card-number">21</div>
+            <div class="card-footer">Check-out books</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Returning books Today</div>
+            <div class="card-number">21</div>
+            <div class="card-footer">Check-in books</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Overdue books</div>
+            <div class="card-number">3</div>
+            <div class="card-footer red">Attention Required</div>
+        </div>
+    </div>
+
+</body>
+
+

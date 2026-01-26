@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Browse Library</title>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header (Đồng nhất UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Navigation Member */
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 30px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Browse Library Container */
+        .browse-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 40px;
+            padding: 50px 40px;
+            border: 1px solid var(--border-color);
+            min-height: 500px;
+        }
+
+        /* Search & Filter Row */
+        .search-action-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 14px 20px 14px 55px;
+            border-radius: 30px;
+            border: 1px solid #d1d5db;
+            background: white;
+            font-size: 18px;
+            outline: none;
+            color: var(--gray-text);
+        }
+
+        .search-input-wrapper svg {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000;
+        }
+
+        /* Nút Filter */
+        .filter-btn {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        /* Book Grid (4 Cột) */
+        .book-list-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 35px;
+        }
+
+        .book-item-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .book-cover-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 30px; /* Bo góc mượt mà */
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        /* Mini Logo Góc phải */
+        .mini-brand-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .book-item-card span {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            padding-left: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">📖</div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Member Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="#" class="nav-item">Overview</a>
+        <a href="#" class="nav-item active">Browse library</a>
+        <a href="#" class="nav-item">My books</a>
+        <a href="#" class="nav-item">Profile</a>
+    </nav>
+
+    <main class="browse-container">
+        <div class="search-action-row">
+            <div class="search-input-wrapper">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+                <input type="text" placeholder="Search by name, title, or ISBN">
+            </div>
+            <div class="filter-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+            </div>
+        </div>
+
+        <div class="book-list-grid">
+            <div class="book-item-card">
+                <div class="book-cover-box">
+                    <div class="mini-brand-tag">📖</div>
+                </div>
+                <span>Book 1</span>
+            </div>
+            <div class="book-item-card">
+                <div class="book-cover-box">
+                    <div class="mini-brand-tag">📖</div>
+                </div>
+                <span>Book 2</span>
+            </div>
+            <div class="book-item-card">
+                <div class="book-cover-box">
+                    <div class="mini-brand-tag">📖</div>
+                </div>
+                <span>Book 3</span>
+            </div>
+            <div class="book-item-card">
+                <div class="book-cover-box">
+                    <div class="mini-brand-tag">📖</div>
+                </div>
+                <span>Book 4</span>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

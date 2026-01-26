@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --white: #ffffff;
+            --bg-light: #f1f3f6;
+            --gray-text: #8c8c8c;
+            --danger-red: #ef4444;
+            --danger-bg: #ffb5b5;
+            --accent-blue: #007bff;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; /* Quan trọng: Giúp padding không làm tăng chiều rộng thực tế của ô input */
+            font-family: 'Segoe UI', sans-serif; 
+        }
+
+        body {
+            background-color: #e5e7eb;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .checkin-card {
+            background: var(--white);
+            width: 380px; /* Tăng nhẹ chiều rộng để layout thoáng hơn */
+            border-radius: 40px; /* Bo góc lớn đồng bộ các page trước */
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .checkin-card h3 { font-size: 22px; margin-bottom: 20px; }
+        hr { border: 0; border-top: 1px solid #eee; margin-bottom: 20px; }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: var(--gray-text);
+        }
+
+        .status-pill {
+            background-color: var(--danger-red);
+            color: white;
+            padding: 5px 25px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Vùng tính tiền phạt */
+        .fine-section { margin: 25px 0; }
+        .fine-box {
+            background-color: var(--danger-bg);
+            border-radius: 25px;
+            padding: 20px;
+        }
+        .fine-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .fine-divider { border-top: 1px solid #333; margin: 5px 0 10px 0; }
+
+        /* SỬA LỖI PHẦN NÀY */
+        .damage-section {
+            margin-top: 25px;
+            width: 100%; /* Đảm bảo section chiếm hết chiều ngang card */
+        }
+
+        .damage-section p {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #000;
+        }
+
+        .damage-input {
+            width: 100%; /* Sẽ không bị tràn nhờ box-sizing: border-box ở trên */
+            background-color: var(--bg-light);
+            border: 1px solid #e0e0e0;
+            padding: 15px 25px;
+            border-radius: 30px; /* Bo tròn mượt mà như ảnh */
+            font-size: 18px;
+            color: #333;
+            outline: none;
+            text-align: left;
+            margin-bottom: 25px;
+            display: block; /* Đảm bảo nó là một khối độc lập */
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkin-card">
+        <h3>Check-in Details</h3>
+        <hr>
+
+        <div class="info-row"><span>Date due</span><span style="color:#555">1/1/2026</span></div>
+        <div class="info-row"><span>Day Returned</span><span style="color:#555">15/1/2026</span></div>
+        <div class="info-row"><span>Status</span><span class="status-pill">Late</span></div>
+
+        <div class="fine-section">
+            <h4 style="margin-bottom: 15px;">Calculated Fine</h4>
+            <div class="fine-box">
+                <div class="fine-row"><span>Days Overdue</span><span>6 days</span></div>
+                <div class="fine-row"><span>Fines/day</span><span>5,000 VND</span></div>
+                <div class="fine-divider"></div>
+                <div class="fine-row" style="font-size: 18px;"><span>Total Fines</span><span>30,000 VND</span></div>
+            </div>
+        </div>
+
+        <div class="damage-section">
+            <p>Damage & Lost Fees (if any)</p>
+            <input type="text" class="damage-input" value="0">
+        </div>
+
+        <button class="confirm-btn">Confirm Check-in</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Member Dashboard</title>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --success-green: #2ecc71;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header (Đồng nhất UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Navigation Member */
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 30px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Layout Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr; /* Sidebar cố định 280px */
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+            align-items: start;
+        }
+
+        /* Sidebar Status */
+        .status-sidebar {
+            background: var(--white);
+            border-radius: 35px;
+            padding: 30px 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .status-sidebar h3 { font-size: 22px; margin-bottom: 25px; font-weight: 700; }
+
+        .status-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .status-card h4 { font-size: 18px; color: #000; font-weight: 600; margin-bottom: 8px; }
+        .status-card p { font-size: 14px; color: var(--gray-text); }
+        .status-card .good-text { color: var(--success-green); font-weight: bold; font-size: 16px; }
+
+        /* Recommend Books Section - CHỈNH SỬA CHÍNH TẠI ĐÂY */
+        .recommend-container {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 40px 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .recommend-container h3 { font-size: 24px; margin-bottom: 40px; font-weight: 700; }
+
+        .book-grid {
+            display: flex; /* Dùng Flexbox thay vì Grid để dễ ép hàng ngang */
+            justify-content: space-between; /* Giãn đều 4 thẻ */
+            gap: 15px; /* Khoảng cách giữa các thẻ */
+        }
+
+        .book-card {
+            flex: 1; /* Chia đều không gian cho mỗi thẻ sách */
+            max-width: 180px; /* Giới hạn độ rộng tối đa để không quá to */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Căn chữ Book 1, 2 sang trái theo UI */
+            gap: 12px;
+        }
+
+        .book-placeholder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 25px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        /* Icon nhỏ ở góc trên bên phải thẻ sách */
+        .mini-icon {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(255,126,1,0.3);
+        }
+
+        .book-card span {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            padding-left: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">📖</div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Member Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="#" class="nav-item active">Overview</a>
+        <a href="#" class="nav-item">Browse library</a>
+        <a href="#" class="nav-item">My books</a>
+        <a href="#" class="nav-item">Profile</a>
+    </nav>
+
+    <div class="main-grid">
+        <aside class="status-sidebar">
+            <h3>Your Status</h3>
+            <div class="status-card">
+                <h4>Borrowing</h4>
+                <p>Max: 10 books</p>
+            </div>
+            <div class="status-card">
+                <h4>Over due</h4>
+                <p class="good-text">Good!</p>
+            </div>
+            <div class="status-card">
+                <h4>Fines</h4>
+                <p>No fines</p>
+            </div>
+        </aside>
+
+        <main class="recommend-container">
+            <h3>Recommend Books</h3>
+            <div class="book-grid">
+                <div class="book-card">
+                    <div class="book-placeholder">
+                        <div class="mini-icon">📖</div>
+                    </div>
+                    <span>Book 1</span>
+                </div>
+                <div class="book-card">
+                    <div class="book-placeholder">
+                        <div class="mini-icon">📖</div>
+                    </div>
+                    <span>Book 2</span>
+                </div>
+                <div class="book-card">
+                    <div class="book-placeholder">
+                        <div class="mini-icon">📖</div>
+                    </div>
+                    <span>Book 3</span>
+                </div>
+                <div class="book-card">
+                    <div class="book-placeholder">
+                        <div class="mini-icon">📖</div>
+                    </div>
+                    <span>Book 4</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

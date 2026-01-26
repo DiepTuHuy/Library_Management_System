@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Book Details Modal</title>
+    <style>
+        :root {
+            --white: #ffffff;
+            --bg-body: #f1f3f6;
+            --gray-text: #8c8c8c;
+            --accent-blue: #007bff;
+            --border-color: #e0e0e0;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+
+        body {
+            background-color: #0b141a; /* Giả lập lớp overlay tối màu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Modal Container */
+        .book-detail-modal {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 50px; /* Bo góc cực đại đúng theo thiết kế */
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        /* Tiêu đề và tác giả */
+        .book-header {
+            margin-bottom: 25px;
+        }
+
+        .book-header h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .book-header p {
+            font-size: 18px;
+            color: var(--gray-text);
+        }
+
+        /* Khung hiển thị ảnh bìa giả lập */
+        .book-cover-large {
+            background-color: #f8f9fa;
+            width: 100%;
+            aspect-ratio: 1.4 / 1;
+            border-radius: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .logo-icon-large {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 80px;
+            box-shadow: 0 8px 20px rgba(255, 126, 1, 0.2);
+        }
+
+        /* Vùng Description */
+        .description-area {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .description-area span {
+            font-size: 18px;
+            color: var(--gray-text);
+            font-weight: 500;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+
+        /* Bảng thông tin chi tiết */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 30px;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 16px;
+            color: var(--gray-text);
+        }
+
+        .info-value {
+            font-size: 17px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* Nút Request */
+        .request-borrow-btn {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .request-borrow-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-detail-modal">
+        <div class="book-header">
+            <h2>Name Book</h2>
+            <p>Author</p>
+        </div>
+
+        <div class="book-cover-large">
+            <div class="logo-icon-large">📖</div>
+        </div>
+
+        <div class="description-area">
+            <span>Description</span>
+        </div>
+
+        <hr>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">ISBN</span>
+                <span class="info-value">xxxx</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Category</span>
+                <span class="info-value">xxxx</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Publisher</span>
+                <span class="info-value">xxxx</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Year of publication</span>
+                <span class="info-value">xxxx</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Status</span>
+                <span class="info-value">xxxx</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Number</span>
+                <span class="info-value">xxxx</span>
+            </div>
+        </div>
+
+        <button class="request-borrow-btn">Request to borrow book</button>
+    </div>
+
+</body>
+</html>

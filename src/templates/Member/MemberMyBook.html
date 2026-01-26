@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - My Books</title>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header (Đồng nhất UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Navigation Member */
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 30px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Main Content Layout */
+        .my-books-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr; /* Chia cột theo tỷ lệ ảnh mẫu */
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+            align-items: start;
+        }
+
+        /* Khối nội dung trắng (Borrowing & History) */
+        .books-section {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .books-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .section-info {
+            text-align: left;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Lưới hiển thị sách bên trong các mục */
+        .books-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .book-card-small {
+            width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .cover-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .mini-brand {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .book-card-small span {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .see-more {
+            margin-top: 25px;
+            display: block;
+            color: var(--gray-text);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">📖</div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Member Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="#" class="nav-item">Overview</a>
+        <a href="#" class="nav-item">Browse library</a>
+        <a href="#" class="nav-item active">My books</a>
+        <a href="#" class="nav-item">Profile</a>
+    </nav>
+
+    <div class="my-books-grid">
+        <section class="books-section">
+            <h3>Borrowing Books</h3>
+            <hr>
+            <p class="section-info">Total Borrowed: X / 10</p>
+            
+            <div class="books-list">
+                <div class="book-card-small">
+                    <div class="cover-box"><div class="mini-brand">📖</div></div>
+                    <span>Book 1</span>
+                </div>
+                <div class="book-card-small">
+                    <div class="cover-box"><div class="mini-brand">📖</div></div>
+                    <span>Book 2</span>
+                </div>
+                <div class="book-card-small">
+                    <div class="cover-box"><div class="mini-brand">📖</div></div>
+                    <span>Book 3</span>
+                </div>
+            </div>
+            
+            <a href="#" class="see-more">See more</a>
+        </section>
+
+        <section class="books-section">
+            <h3>History</h3>
+            <hr>
+            
+            <div class="books-list">
+                <div class="book-card-small">
+                    <div class="cover-box"><div class="mini-brand">📖</div></div>
+                    <span>Book 1</span>
+                </div>
+                <div class="book-card-small">
+                    <div class="cover-box"><div class="mini-brand">📖</div></div>
+                    <span>Book 2</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
