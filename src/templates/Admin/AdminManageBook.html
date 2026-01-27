@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management - Admin Manage Books</title>
+
     <style>
         :root {
             --bg-body: #f1f3f6;
@@ -14,24 +15,86 @@
             --border-color: #e0e0e0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
-
-        /* Header Admin */
-        .header-container {
-            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
-            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
-            justify-content: space-between; align-items: center; margin-bottom: 30px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
-        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        
-        /* Navigation Admin */
-        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
-        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
-        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* Search & Add Section */
+        body {
+            background-color: var(--bg-body);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ===== Header ===== */
+        .header-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-box {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(#ffae3d, #ff7e01);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+        }
+
+        .sign-out-btn {
+            background: var(--dark-black);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ===== Navigation ===== */
+        .nav-bar {
+            background: var(--nav-bg);
+            padding: 5px;
+            border-radius: 40px;
+            display: flex;
+            margin-bottom: 40px;
+        }
+
+        .nav-item {
+            padding: 10px 35px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 40px;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: black;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* ===== Action Row ===== */
         .action-row {
             display: flex;
             align-items: center;
@@ -62,7 +125,6 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: #000;
         }
 
         .add-circle-btn {
@@ -76,11 +138,10 @@
             align-items: center;
             font-size: 32px;
             cursor: pointer;
-            color: #000;
-            transition: 0.2s;
+            user-select: none;
         }
 
-        /* Table Section */
+        /* ===== Table ===== */
         .table-box {
             background: var(--white);
             width: 100%;
@@ -96,79 +157,111 @@
         }
 
         th {
-            color: #444;
-            font-weight: 500;
             font-size: 17px;
             padding: 18px 10px;
-            text-align: left;
             border-bottom: 1px solid #eee;
+            text-align: left;
         }
 
         td {
             padding: 16px 10px;
             border-bottom: 1px solid #eee;
-            font-size: 16px;
-            color: #333;
             height: 58px;
         }
 
-        tr:last-child td { border-bottom: none; }
-        
-        .col-id { width: 70px; }
+        /* ===== Overlay Add Book ===== */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
+        .modal-box {
+            width: 520px;
+            border-radius: 40px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .modal-box iframe {
+            width: 100%;
+            height: 620px;
+            border: none;
+        }
     </style>
 </head>
+
 <body>
 
+    <!-- Header -->
     <div class="header-container">
         <div class="header-left">
             <div class="logo-box">📖</div>
             <div style="margin-left: 15px;">
-                <h2 style="font-size: 20px;">Library Management System</h2>
-                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+                <h2>Library Management System</h2>
+                <p style="color:#8c8c8c;">Admin Dashboard</p>
             </div>
         </div>
         <button class="sign-out-btn">Sign out</button>
     </div>
 
+    <!-- Navigation -->
     <div class="nav-bar">
-        <a href="#" class="nav-item">Overview</a>
-        <a href="#" class="nav-item">Manage User</a>
-        <a href="#" class="nav-item active">Manage Books</a>
-        <a href="#" class="nav-item">Reports</a>
+        <a href="AdminOverview.html" class="nav-item">Overview</a>
+        <a href="AdminManageUser.html" class="nav-item">Manage User</a>
+        <a href="AdminManageBook.html" class="nav-item active">Manage Books</a>
+        <a href="AdminReportBorrowandReturn.html" class="nav-item">Reports</a>
     </div>
 
+    <!-- Search + Add -->
     <div class="action-row">
         <div class="search-container">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+            </svg>
             <input type="text" placeholder="Find by name or Email">
         </div>
-        <div class="add-circle-btn">+</div>
+
+        <!-- FIX: mở modal -->
+        <div class="add-circle-btn" onclick="openModal()">+</div>
     </div>
 
+    <!-- Table -->
     <div class="table-box">
         <table>
             <thead>
                 <tr>
-                    <th class="col-id">ID</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>ISBN</th>
-                    <th>Category</th>
-                    <th>Total</th>
-                    <th>Remaining</th>
-                    <th>Status</th>
+                    <th>ID</th><th>Title</th><th>Author</th><th>ISBN</th>
+                    <th>Category</th><th>Total</th><th>Remaining</th><th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                 <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
             </tbody>
         </table>
     </div>
+
+    <!-- ===== Overlay ===== -->
+    <div id="overlay" class="overlay" onclick="closeModal()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <iframe src="AdminAddBook.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("overlay").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
 
 </body>
 </html>
