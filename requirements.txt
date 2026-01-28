@@ -1,49 +1,61 @@
 # Library Management System - Python Dependencies
 # Python 3.13.0+
+# Based on: Flask Backend (app.py) + Model/Controller Architecture
 
 # ============================================
-# CORE GUI & APPLICATION FRAMEWORK
+# WEB FRAMEWORK (CORE - Flask Backend)
 # ============================================
-customtkinter==5.2.0          # Modern GUI framework based on tkinter
-pillow==10.1.0                # Image processing for GUI icons
-python-dotenv==1.0.0          # Environment variables management
+flask==3.0.0                  # Flask web framework (app.py backend server)
+flask-cors==4.0.0             # CORS support for Flask (cross-origin requests)
+werkzeug==3.0.1               # WSGI utilities and security helpers for Flask
 
 # ============================================
 # DATABASE & ORM
 # ============================================
-pymongo==4.6.0                # MongoDB Python driver
-mongomock==4.1.2              # MongoDB mock for testing
+pymongo==4.6.0                # MongoDB Python driver (production database)
+mongomock==4.1.2              # MongoDB mock for testing (in-memory testing)
+
+# ============================================
+# AUTHENTICATION & SECURITY
+# ============================================
+bcrypt==4.1.1                 # Password hashing and verification
+cryptography==41.0.7          # Encryption utilities and security
+email-validator==2.1.0        # Email validation for user registration
+python-dotenv==1.0.0          # Environment variables management (.env files)
 
 # ============================================
 # DATA PROCESSING & EXPORT
 # ============================================
-pandas==2.1.0                 # Data manipulation and analysis
-openpyxl==3.1.0               # Excel file support
-xlsxwriter==3.1.9             # Excel file creation
+pandas==2.1.0                 # Data manipulation and analysis (reports)
+openpyxl==3.1.0               # Excel file support (XLSX format)
+xlsxwriter==3.1.9             # Excel file creation and formatting
 
 # ============================================
 # TESTING & QUALITY ASSURANCE
 # ============================================
-pytest==7.4.3                 # Testing framework
-pytest-cov==4.1.0             # Code coverage for pytest
-pytest-mock==3.12.0           # Mock support for pytest
-coverage==7.4.0               # Code coverage measurement
+pytest==7.4.3                 # Testing framework (unit/integration tests)
+pytest-cov==4.1.0             # Code coverage measurement for pytest
+pytest-mock==3.12.0           # Mocking support for pytest
+coverage==7.4.0               # Code coverage analysis
 
 # ============================================
 # CODE QUALITY & STYLE
 # ============================================
-pylint==3.0.3                 # Code analysis
-black==23.12.1                # Code formatter
+pylint==3.0.3                 # Code analysis and style checking
+black==23.12.1                # Code formatter (PEP 8 compliant)
 flake8==6.1.0                 # Style guide enforcement
-isort==5.13.2                 # Import sorting
+isort==5.13.2                 # Python import statement sorting
 
 # ============================================
-# UTILITIES & HELPERS
+# HTTP & API UTILITIES
 # ============================================
-requests==2.31.0              # HTTP library
-email-validator==2.1.0        # Email validation
-bcrypt==4.1.1                 # Password hashing
-cryptography==41.0.7          # Encryption utilities
+requests==2.31.0              # HTTP library for API calls
+
+# ============================================
+# GUI (DESKTOP APPLICATION - Optional)
+# ============================================
+# customtkinter==5.2.0        # Modern GUI framework (optional - desktop app)
+# pillow==10.1.0              # Image processing for GUI (optional)
 
 # ============================================
 # OPTIONAL: Documentation & Logging
