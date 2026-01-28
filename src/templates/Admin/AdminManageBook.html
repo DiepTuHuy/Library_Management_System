@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Admin Manage Books</title>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #262626;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --border-color: #d1d5db;
+            --accent-blue: #007bff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header Admin */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 30px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        /* Navigation Admin */
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Search & Add Section */
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 15px 15px 15px 55px;
+            border-radius: 25px;
+            border: 1px solid #d1d5db;
+            background: white;
+            font-size: 18px;
+            outline: none;
+            color: var(--gray-text);
+        }
+
+        .search-container svg {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000;
+        }
+
+        .add-circle-btn {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+            color: #000;
+            transition: 0.2s;
+        }
+
+        /* Table Section */
+        .table-box {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 40px;
+            padding: 20px 35px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            color: #444;
+            font-weight: 500;
+            font-size: 17px;
+            padding: 18px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 16px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            color: #333;
+            height: 58px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        
+        .col-id { width: 70px; }
+
+        /* --- Modal Overlay --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* --- Modal Container --- */
+        .add-book-modal {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 40px;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .add-book-modal h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .modal-hr { border: 0; border-top: 1px solid #eee; margin-bottom: 25px; }
+
+        /* --- Form Layout --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 25px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: 500;
+            color: #262626;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            background: var(--white);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: none;
+            border-radius: 25px;
+        }
+
+        /* --- Buttons --- */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-add {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            color: #000;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-add:hover { opacity: 0.9; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+            </div>
+        </div>
+        <a href="/logout" class="sign-out-btn">Sign out</a>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/admin/dashboard" class="nav-item">Overview</a>
+        <a href="/admin/manage-users" class="nav-item">Manage User</a>
+        <a href="/admin/manage-books" class="nav-item active">Manage Books</a>
+        <a href="/admin/reports/borrow-return" class="nav-item">Reports</a>
+    </div>
+
+    <div class="action-row">
+        <div class="search-container">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+            <input type="text" id="searchInput" placeholder="Find by title, author, category, or ISBN" onkeyup="searchBooks()">
+        </div>
+        <div class="add-circle-btn" onclick="openAddBookModal()">+</div>
+    </div>
+
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-id">BookID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Category</th>
+                    <th>Total</th>
+                    <th>Remaining</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="booksTableBody">
+                <!-- Books will be loaded here by JavaScript -->
+            </tbody>
+        </table>
+        <div id="emptyMessage" style="text-align: center; padding: 40px; color: #999;">
+            No books found. Click + to add a book.
+        </div>
+        
+        <!-- Pagination Controls -->
+        <div id="paginationControls" style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 25px; padding: 15px 0; border-top: 1px solid #e0e0e0;">
+            <button id="prevBtn" onclick="goToPreviousPage()" style="background: none; border: none; cursor: pointer; padding: 8px 12px; font-size: 24px; color: #666; transition: 0.2s;" title="Previous">
+                ◄
+            </button>
+            <span id="pageInfo" style="font-size: 14px; color: #666; min-width: 150px; text-align: center;">Page 1 of 1</span>
+            <button id="nextBtn" onclick="goToNextPage()" style="background: none; border: none; cursor: pointer; padding: 8px 12px; font-size: 24px; color: #666; transition: 0.2s;" title="Next">
+                ►
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="addBookModal" onclick="closeAddBookModal(event)">
+        <div class="add-book-modal" onclick="event.stopPropagation()">
+            <h3>Add new book</h3>
+            <hr class="modal-hr">
+
+            <form id="addBookForm" onsubmit="handleAddBook(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="bookTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" id="bookAuthor" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ISBN</label>
+                        <input type="text" id="bookISBN" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="bookCategory" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" id="bookYear" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Publisher</label>
+                        <input type="text" id="bookPublisher" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Quantity</label>
+                        <input type="number" id="bookQuantity" min="1" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-add">Add</button>
+                    <button type="button" class="btn-cancel" onclick="closeAddBookModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        const BOOKS_PER_PAGE = 9;
+        let allBooks = [];
+        let filteredBooks = [];
+        let currentPage = 1;
+
+        // Load books on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBooks();
+            setupScrollListener();
+        });
+
+        async function loadBooks() {
+            try {
+                const response = await fetch(`${API_BASE}/books`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                if (!response.ok) throw new Error('Failed to load books');
+
+                const data = await response.json();
+                if (data.success) {
+                    allBooks = data.books || [];
+                    filteredBooks = allBooks;
+                    currentPage = 1;
+                    renderBooks();
+                } else {
+                    console.error('Failed to load books:', data.message);
+                }
+            } catch (error) {
+                console.error('Error loading books:', error);
+                alert('Failed to load books. Make sure backend is running.');
+            }
+        }
+
+        function renderBooks() {
+            const tbody = document.getElementById('booksTableBody');
+            const emptyMsg = document.getElementById('emptyMessage');
+            
+            tbody.innerHTML = '';
+            
+            if (!filteredBooks || filteredBooks.length === 0) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+            
+            emptyMsg.style.display = 'none';
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
+            const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+            const endIndex = Math.min(startIndex + BOOKS_PER_PAGE, filteredBooks.length);
+            const paginatedBooks = filteredBooks.slice(startIndex, endIndex);
+            
+            // Render books with IDs from database
+            paginatedBooks.forEach((book) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${book.book_id}</td>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.isbn}</td>
+                    <td>${book.category}</td>
+                    <td>${book.quantity}</td>
+                    <td>${book.available_quantity}</td>
+                    <td><span style="color: ${book.status === 'Available' ? 'green' : 'red'}">${book.status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Update pagination info and buttons
+            updatePaginationInfo(totalPages);
+            updatePaginationButtons();
+        }
+
+        function updatePaginationInfo(totalPages) {
+            let paginationContainer = document.getElementById('paginationInfo');
+            
+            if (!paginationContainer) {
+                paginationContainer = document.createElement('div');
+                paginationContainer.id = 'paginationInfo';
+                paginationContainer.style.cssText = 'text-align: center; margin-top: 15px; padding: 10px; color: #666; font-size: 14px;';
+                const table = document.querySelector('table');
+                table.parentNode.insertBefore(paginationContainer, table.nextSibling);
+            }
+            
+            const startItem = (currentPage - 1) * BOOKS_PER_PAGE + 1;
+            const endItem = Math.min(currentPage * BOOKS_PER_PAGE, filteredBooks.length);
+            paginationContainer.innerHTML = `Showing ${startItem}-${endItem} of ${filteredBooks.length} | Page ${currentPage} of ${totalPages}`;
+        }
+
+        function setupScrollListener() {
+            // Scroll listener removed - Using manual pagination buttons only
+        }
+
+        function searchBooks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!query) {
+                filteredBooks = allBooks;
+            } else {
+                filteredBooks = allBooks.filter(book => 
+                    book.title.toLowerCase().includes(query) ||
+                    book.author.toLowerCase().includes(query) ||
+                    book.category.toLowerCase().includes(query) ||
+                    book.isbn.toLowerCase().includes(query)
+                );
+            }
+            
+            currentPage = 1;
+            renderBooks();
+        }
+
+        async function handleAddBook(event) {
+            event.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                isbn: document.getElementById('bookISBN').value,
+                category: document.getElementById('bookCategory').value,
+                year: parseInt(document.getElementById('bookYear').value),
+                publisher: document.getElementById('bookPublisher').value,
+                quantity: parseInt(document.getElementById('bookQuantity').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/books`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Book added successfully!');
+                    closeAddBookModal();
+                    document.getElementById('addBookForm').reset();
+                    loadBooks();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error adding book:', error);
+                alert('Failed to add book. Make sure backend is running.');
+            }
+        }
+
+        function openAddBookModal() {
+            document.getElementById('addBookModal').classList.add('active');
+        }
+
+        function closeAddBookModal(event) {
+            if (event && event.target.id !== 'addBookModal') return;
+            document.getElementById('addBookModal').classList.remove('active');
+        }
+
+        function goToNextPage() {
+            const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderBooks();
+                updatePaginationButtons();
+            }
+        }
+
+        function goToPreviousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderBooks();
+                updatePaginationButtons();
+            }
+        }
+
+        function updatePaginationButtons() {
+            const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const pageInfo = document.getElementById('pageInfo');
+            
+            // Update page info
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // Disable/Enable previous button
+            if (currentPage === 1) {
+                prevBtn.disabled = true;
+                prevBtn.style.color = '#ccc';
+                prevBtn.style.cursor = 'not-allowed';
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.style.color = '#666';
+                prevBtn.style.cursor = 'pointer';
+            }
+            
+            // Disable/Enable next button
+            if (currentPage >= totalPages) {
+                nextBtn.disabled = true;
+                nextBtn.style.color = '#ccc';
+                nextBtn.style.cursor = 'not-allowed';
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.style.color = '#666';
+                nextBtn.style.cursor = 'pointer';
+            }
+        }
+
+        // Close modal when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAddBookModal();
+            }
+        });
+    </script>
+
+</body>
+</html>

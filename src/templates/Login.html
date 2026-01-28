@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library System - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            /* Nền tối theo image_8a59df.png */
+            background: #F5F5F7; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===== LOGIN CARD ===== */
+        .login-card {
+            background: white;
+            border-radius: 40px; /* Bo góc cực lớn theo thiết kế */
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .logo-icon {
+            width: 65px;
+            height: 65px;
+            background: #ff9500;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 10px rgba(255,149,0,0.3);
+        }
+
+        .login-card h1 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            color: #111;
+        }
+
+        .login-logo {
+            width: 100px;              /* Kích thước ảnh */
+            height: 100px;
+            object-fit: cover;         /* Giữ tỉ lệ ảnh không bị méo */
+            
+            /* === 1. KỸ THUẬT ĐÈ LÊN VIỀN === */
+            /* Padding-top của card đang là 50px. 
+            Muốn ảnh trồi lên hẳn, ta dùng margin âm lớn hơn padding */
+            margin-top: -100px;        
+            margin-bottom: 20px;       /* Đẩy tiêu đề H1 xuống một chút */
+            
+            /* Canh giữa ảnh */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+
+            /* === 2. BO GÓC === */
+            border-radius: 25px;       /* Bo góc vuông (muốn tròn vo thì để 50%) */
+            
+            /* Tạo bóng để ảnh tách biệt khỏi nền xám phía sau */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); 
+            background-color: #fff;    /* Đề phòng ảnh PNG trong suốt */
+        }
+
+        /* ===== FORM INPUTS ===== */
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 16px 25px;
+            border-radius: 35px;
+            border: 1px solid transparent;
+            background: #f2f2f7; /* Màu input xám nhạt */
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        /* Hiệu ứng focus xanh theo image_8a595a.png */
+        .auth-input:focus {
+            background: white;
+            border: 2px solid #007aff;
+        }
+
+        /* ===== UTILS (Captcha & Forgot) ===== */
+        .auth-utils {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px 25px 10px;
+            font-size: 14px;
+        }
+
+        .captcha {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #444;
+        }
+
+        .forgot-link {
+            color: #007aff;
+            text-decoration: none;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-login {
+            width: 100%;
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 35px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #0063cc;
+        }
+
+        .auth-footer {
+            font-size: 15px;
+        }
+
+        .auth-footer a {
+            display: block;
+            text-decoration: none;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .guest-link {
+            color: #007aff !important;
+            margin-top: 40px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="login-logo"/>
+        
+        <h1>Library Management System</h1>
+
+        <div class="input-group">
+            <input type="text" id="emailInput" class="auth-input" placeholder="Email">
+        </div>
+        
+        <div class="input-group">
+            <input type="password" id="passwordInput" class="auth-input" placeholder="Password">
+        </div>
+
+        <div class="auth-utils">
+            <label class="captcha">
+                <input type="checkbox" id="captchaCheck"> I'm not a robot
+            </label>            
+            <a href="/forgot-password" class="forgot-link">Forgot password ?</a>
+        </div>
+
+        <button class="btn-login" onclick="handleLogin()">Login</button>
+
+        <div class="auth-footer">
+            <a href="/register">Register</a>
+            <a href="/guest" class="guest-link">Continue as a Guest</a>
+        </div>
+        
+        <!-- Demo credentials helper (remove in production) -->
+        <div id="demoHelper" style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 12px; font-size: 12px; display: none;">
+            <div style="margin-bottom: 8px; font-weight: bold; color: #666;">Demo Accounts:</div>
+            <button type="button" onclick="fillDemo('admin')" style="display: block; width: 100%; padding: 8px; margin-bottom: 5px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">Admin: admin@library.system</button>
+            <button type="button" onclick="fillDemo('librarian')" style="display: block; width: 100%; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">Librarian: librarian@library.system</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        
+        // Show demo helper in development (comment out in production)
+        document.getElementById('demoHelper').style.display = 'block';
+        
+        /**
+         * Fill login form with demo credentials
+         */
+        function fillDemo(role) {
+            const credentials = {
+                'admin': {
+                    email: 'admin@library.system',
+                    password: 'admin123'
+                },
+                'librarian': {
+                    email: 'librarian@library.system',
+                    password: 'librarian123'
+                }
+            };
+            
+            const creds = credentials[role];
+            if (creds) {
+                document.getElementById('emailInput').value = creds.email;
+                document.getElementById('passwordInput').value = creds.password;
+                document.getElementById('captchaCheck').checked = true;
+            }
+        }
+        
+        /**
+         * Handle login form submission
+         * Authenticates user from MongoDB
+         * Stores session and redirects based on role
+         */
+        async function handleLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            const captchaChecked = document.getElementById('captchaCheck').checked;
+            
+            // Validation
+            if (!email) {
+                alert('Please enter email');
+                return;
+            }
+            
+            if (!password) {
+                alert('Please enter password');
+                return;
+            }
+            
+            if (!captchaChecked) {
+                alert('Please confirm you are not a robot');
+                return;
+            }
+            
+            try {
+                // Call backend login API - authenticates from MongoDB
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',  // Include cookies for session
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // User authenticated - session stored server-side
+                    // Redirect based on role from MongoDB
+                    redirectByRole(data.user.role);
+                } else {
+                    alert(data.message || 'Login failed');
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+                console.error('Login error:', error);
+            }
+        }
+        
+        /**
+         * Redirect user to appropriate dashboard based on role
+         * All roles come from MongoDB (no hardcoded)
+         */
+        function redirectByRole(role) {
+            const redirectMap = {
+                'admin': '/admin/dashboard',
+                'librarian': '/librarian/dashboard',
+                'member': '/member/dashboard',
+                'guest': '/guest'
+            };
+            
+            const redirectUrl = redirectMap[role] || '/guest';
+            window.location.href = redirectUrl;
+        }
+        
+        // Allow Enter key to login
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+    </script>
+</body>
+</html>
+
+

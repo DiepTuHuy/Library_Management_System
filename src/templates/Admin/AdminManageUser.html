@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Manage User</title>
+    <style>
+        /* --- Base & Consistency --- */
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --dark-black: #262626;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header & Nav (Nhất quán UI Admin) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 30px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* --- Search Row --- */
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border-radius: 25px;
+            border: 1px solid #d1d5db;
+            background: white;
+            font-size: 18px;
+            outline: none;
+            color: var(--gray-text);
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000;
+        }
+
+        .add-btn {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        /* --- Table Section --- */
+        .table-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 35px;
+            padding: 20px 30px;
+            border: 1px solid var(--border-color);
+            min-height: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            color: #333;
+            font-weight: 500;
+            font-size: 17px;
+            padding: 15px 10px;
+            text-align: left; /* Căn trái theo ảnh mẫu */
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            color: #333;
+            height: 55px;
+        }
+
+        /* Cột ID căn giữa nhẹ để dễ nhìn */
+        .col-id { width: 80px; text-align: left; }
+        
+        tr:last-child td { border-bottom: none; }
+
+        /* --- Modal Overlay --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* Khung Modal chính */
+        .add-user-modal {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 40px;
+            padding: 30px 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .modal-hr {
+            border: 0;
+            border-top: 1px solid #f0f0f0;
+            margin-bottom: 25px;
+        }
+
+        /* Form Layout */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+        }
+
+        /* Nút bấm */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .btn-add {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            color: #000000;
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            opacity: 0.9;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div style="margin-left: 15px;">
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+            </div>
+        </div>
+        <a href="/logout" class="sign-out-btn">Sign out</a>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/admin/dashboard" class="nav-item">Overview</a>
+        <a href="/admin/manage-users" class="nav-item active">Manage User</a>
+        <a href="/admin/manage-books" class="nav-item">Manage Books</a>
+        <a href="/admin/reports/borrow-return" class="nav-item">Reports</a>
+    </div>
+
+    <div class="search-row">
+        <div class="search-wrapper">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+            <input type="text" placeholder="Search by name, title, or ISBN">
+        </div>
+        <div class="add-btn" onclick="openAddUserModal()">+</div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-id">ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Date Joined</th>
+                    <th style="width: 120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                <!-- Users will be loaded here by JavaScript -->
+            </tbody>
+        </table>
+        <div id="emptyMessage" style="display:none; text-align:center; padding:20px; color:#999;">
+            No users found.
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="addUserModal" onclick="closeAddUserModal(event)">
+        <div class="add-user-modal" onclick="event.stopPropagation()">
+            <h3 class="modal-title">Add new user</h3>
+            <hr class="modal-hr">
+
+            <form>
+                <div class="form-group">
+                    <label for="fullname">Full name</label>
+                    <input type="text" id="fullname">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" id="role">
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-add">Add</button>
+                    <button type="button" class="btn-cancel" onclick="closeAddUserModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let allUsers = [];
+
+        // Load users on page load
+        window.addEventListener('load', function() {
+            loadUsers();
+        });
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/users`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    allUsers = data.users;
+                    renderUsers(allUsers);
+                } else {
+                    console.error('Failed to load users:', data.message);
+                    alert('Failed to load users. Make sure backend is running.');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                alert('Failed to load users. Make sure backend is running.');
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            const emptyMsg = document.getElementById('emptyMessage');
+            
+            tbody.innerHTML = '';
+            
+            if (!users || users.length === 0) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+            
+            emptyMsg.style.display = 'none';
+            
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+                const createdDate = new Date(user.created_at || new Date()).toLocaleDateString('vi-VN');
+                
+                row.id = `user-row-${user._id}`;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.name || 'N/A'}</td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td><span style="background: #e8f4f8; padding: 5px 12px; border-radius: 15px; font-size: 14px;">${user.role || 'member'}</span></td>
+                    <td><span style="color: green;">Active</span></td>
+                    <td>${createdDate}</td>
+                    <td><button class="btn-delete" onclick="deleteUser('${user._id}', '${user.email}', this)">Delete</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function searchUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!query) {
+                renderUsers(allUsers);
+            } else {
+                const filtered = allUsers.filter(user => 
+                    (user.name && user.name.toLowerCase().includes(query)) ||
+                    (user.email && user.email.toLowerCase().includes(query)) ||
+                    (user.role && user.role.toLowerCase().includes(query))
+                );
+                renderUsers(filtered);
+            }
+        }
+
+        async function deleteUser(userId, userEmail, buttonElement) {
+            if (!confirm(`Are you sure you want to delete ${userEmail}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Remove row from table
+                    const row = document.getElementById(`user-row-${userId}`);
+                    if (row) {
+                        row.remove();
+                    }
+                    
+                    // Remove from allUsers array
+                    allUsers = allUsers.filter(u => u._id !== userId);
+                    
+                    // Check if table is now empty
+                    const tbody = document.getElementById('usersTableBody');
+                    if (tbody.children.length === 0) {
+                        document.getElementById('emptyMessage').style.display = 'block';
+                    }
+                    
+                    alert('User deleted successfully!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Failed to delete user. Make sure backend is running.');
+            }
+        }
+
+        function openAddUserModal() {
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
+        function closeAddUserModal(event) {
+            if (event && event.target.id !== 'addUserModal') return;
+            document.getElementById('addUserModal').classList.remove('active');
+        }
+
+        // Add search input functionality
+        const searchInput = document.querySelector('.search-wrapper input');
+        if (searchInput) {
+            searchInput.id = 'searchInput';
+            searchInput.addEventListener('input', searchUsers);
+        }
+
+        // Close modal when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAddUserModal();
+            }
+        });
+    </script>
+
+</body>
+</html>

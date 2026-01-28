@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Report Late</title>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --accent-blue: #007bff;
+            --dark-black: #262626;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* --- Header & Nav (Giữ nguyên tính đồng nhất) --- */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; transition: 0.3s; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* --- Stats Row --- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+        .stat-small-card { background: var(--white); padding: 20px; border-radius: 25px; border: 1px solid var(--border-color); }
+        .stat-small-card h4 { font-size: 16px; color: #000; margin-bottom: 10px; }
+        .stat-small-card p { font-size: 14px; color: var(--gray-text); }
+
+        /* --- Main Layout --- */
+        .report-main-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Sidebar Menu */
+        .report-sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .side-btn {
+            background: var(--white); border: 1px solid var(--border-color); padding: 15px;
+            border-radius: 20px; text-align: center; font-size: 16px;
+            font-weight: 500; cursor: pointer; color: #555; text-decoration: none;
+        }
+        .side-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+        /* --- Phần chỉnh sửa chính: Table Area --- */
+        .table-container {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            min-height: 450px;
+        }
+
+        .table-container h3 { text-align: center; margin-bottom: 40px; font-size: 20px; font-weight: 600; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th {
+            font-size: 19px;
+            font-weight: 500;
+            color: #000;
+            padding: 10px 0;
+            text-align: left;
+            border-bottom: 1px solid #333; /* Đường kẻ tiêu đề đậm */
+        }
+
+        td {
+            padding: 20px 0;
+            border-bottom: 1px solid #ccc; /* Đường kẻ hàng mảnh */
+            font-size: 17px;
+            color: #333;
+        }
+
+        /* Căn lề các cột theo ảnh */
+        .col-name { width: 30%; }
+        .col-member { width: 25%; text-align: center; }
+        .col-date { width: 15%; text-align: center; }
+        .col-late { width: 15%; text-align: center; }
+        .col-fine { width: 15%; text-align: right; }
+
+        /* Chỉnh text-align cho Header tương ứng */
+        th.col-member, th.col-date, th.col-late { text-align: center; }
+        th.col-fine { text-align: right; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div>
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+            </div>
+        </div>
+        <a href="/logout" class="sign-out-btn">Sign out</a>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/admin/dashboard" class="nav-item">Overview</a>
+        <a href="/admin/manage-users" class="nav-item">Manage User</a>
+        <a href="/admin/manage-books" class="nav-item">Manage Books</a>
+        <a href="/admin/reports/borrow-return" class="nav-item active">Reports</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-small-card"><h4>Borrows This Month</h4><p id="stat-borrows-month">0</p></div>
+        <div class="stat-small-card"><h4>Returns This Month</h4><p id="stat-returns-month">0</p></div>
+        <div class="stat-small-card"><h4>Late</h4><p id="stat-overdue-count">0</p></div>
+        <div class="stat-small-card"><h4>Fines Collected</h4><p id="stat-unpaid-fines">0</p></div>
+    </div>
+
+    <div class="report-main-grid">
+        <div class="report-sidebar">
+            <a href="/admin/reports/borrow-return" class="side-btn">Borrow / return</a>
+            <a href="/admin/reports/category" class="side-btn">Category</a>
+            <a href="/admin/reports/top-books" class="side-btn">Top Books</a>
+            <a href="#" class="side-btn active">Late</a>
+        </div>
+
+        <div class="table-container">
+            <h3>List Books Overdue</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-name">Name Books</th>
+                        <th class="col-member">Member</th>
+                        <th class="col-date">Due Date</th>
+                        <th class="col-late">Days Late</th>
+                        <th class="col-fine">Fines</th>
+                    </tr>
+                </thead>
+                <tbody id="overdue-body">
+                    <!-- Filled dynamically from API -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        (async function(){
+            try{
+                const res = await fetch('/api/reports/summary?date_filter=monthly', {credentials: 'include'});
+                const data = await res.json();
+                if(!data.success) return;
+                const report = data.report || {};
+                document.getElementById('stat-borrows-month').textContent = report.books.total_borrowed || 0;
+                document.getElementById('stat-returns-month').textContent = report.books.total_available || 0;
+                document.getElementById('stat-overdue-count').textContent = report.borrows.overdue_borrows || 0;
+                document.getElementById('stat-unpaid-fines').textContent = (report.fines.total_unpaid_fines || 0).toLocaleString();
+            }catch(e){ console.error('Failed to load report stats', e); }
+        })();
+    </script>
+
+    <script>
+        (async function(){
+            try{
+                const borrowsRes = await fetch('/api/borrows/overdue', {credentials: 'include'});
+                const borrowsData = await borrowsRes.json();
+                const borrows = borrowsData.borrows || [];
+
+                const finesRes = await fetch('/api/fines/pending', {credentials: 'include'});
+                const finesData = await finesRes.json();
+                const fines = finesData.fines || [];
+                const fineMap = {};
+                fines.forEach(f => { fineMap[f.record_id] = f.amount; });
+
+                const tbody = document.getElementById('overdue-body');
+                borrows.forEach(b => {
+                    const tr = document.createElement('tr');
+                    const daysLate = b.overdue_days || 0;
+                    const fineAmt = fineMap[b.id] || (daysLate > 0 ? daysLate * 1000 : 0);
+                    tr.innerHTML = `
+                        <td class="col-name">${b.book_title}</td>
+                        <td class="col-member">${b.member_name}</td>
+                        <td class="col-date">${b.due_date ? new Date(b.due_date).toLocaleDateString() : ''}</td>
+                        <td class="col-late">${daysLate} days</td>
+                        <td class="col-fine">${fineAmt.toLocaleString()} VND</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }catch(e){
+                console.error('Failed to load overdue data', e);
+            }
+        })();
+    </script>
+
+</body>
+</html>

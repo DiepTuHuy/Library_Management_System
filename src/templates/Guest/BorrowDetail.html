@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Detail Guest</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body{
+    background:#0b2430;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    background:#fff;
+    width:360px;
+    border-radius:25px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* TITLE */
+.book-header{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.book-header h2{
+    font-size:20px;
+    font-weight:700;
+}
+
+.book-header p{
+    font-size:14px;
+    color:#8e8e93;
+}
+
+/* IMAGE */
+.book-image{
+    background:#f2f2f7;
+    border-radius:20px;
+    height:200px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.book-image span{
+    font-size:80px;
+    color:#ff9500;
+}
+
+/* DESCRIPTION */
+.desc{
+    font-size:14px;
+    color:#8e8e93;
+    margin-bottom:15px;
+}
+
+/* INFO GRID */
+.info{
+    border-top:1px solid #e5e5ea;
+    padding-top:15px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px 20px;
+    font-size:14px;
+}
+
+.label{
+    color:#8e8e93;
+}
+
+.value{
+    color:#1c1c1e;
+    font-weight:500;
+}
+
+/* BUTTON */
+.btn-login{
+    margin-top:25px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:#007aff;
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="book-header">
+        <h2>Name Book</h2>
+        <p>Author</p>
+    </div>
+
+    <div class="book-image">
+        <span>📖</span>
+    </div>
+
+    <p class="desc">Description</p>
+
+    <div class="info">
+        <div>
+            <div class="label">ISBN</div>
+            <div class="value">123-456-789</div>
+        </div>
+
+        <div>
+            <div class="label">Category</div>
+            <div class="value">Education</div>
+        </div>
+
+        <div>
+            <div class="label">Publisher</div>
+            <div class="value">ABC Publisher</div>
+        </div>
+
+        <div>
+            <div class="label">Year of publication</div>
+            <div class="value">2024</div>
+        </div>
+
+        <div>
+            <div class="label">Status</div>
+            <div class="value" style="color:#34c759;">Available</div>
+        </div>
+
+        <div>
+            <div class="label">Number</div>
+            <div class="value">5</div>
+        </div>
+    </div>
+
+    <button class="btn-login">Login to borrow books</button>
+
+</div>
+
+</body>
+</html>
+
+

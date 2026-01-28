@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --white: #ffffff;
+            --bg-body: #f1f3f6;
+            --gray-border: #d1d5db;
+            --gray-text: #262626;
+            --accent-blue: #007bff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: #333; /* Giả lập nền tối khi hiện modal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Modal Container --- */
+        .add-book-modal {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 40px; /* Bo góc cực đại đồng nhất với các UI trước */
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .add-book-modal h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        hr { border: 0; border-top: 1px solid #eee; margin-bottom: 25px; }
+
+        /* --- Form Layout --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 25px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--gray-text);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 20px;
+            border: 1px solid var(--gray-border);
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            background: var(--white);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: none;
+            border-radius: 25px;
+        }
+
+        /* --- Buttons --- */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-add {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            color: #000;
+            border: 1px solid var(--gray-border);
+            padding: 10px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-add:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+    <div class="add-book-modal">
+        <h3>Add new book</h3>
+        <hr>
+
+        <form>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text">
+                </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text">
+                </div>
+
+                <div class="form-group">
+                    <label>ISBN</label>
+                    <input type="text">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text">
+                </div>
+
+                <div class="form-group">
+                    <label>Year</label>
+                    <input type="text">
+                </div>
+                <div class="form-group">
+                    <label>Publisher</label>
+                    <input type="text">
+                </div>
+
+                <div class="form-group">
+                    <label>Available</label>
+                    <input type="text">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea></textarea>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-add">Add</button>
+                <button type="button" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
+

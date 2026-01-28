@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Category Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --accent-blue: #007bff;
+            --dark-black: #262626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header & Nav (Nhất quán UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 25px; border: 1px solid #e0e0e0; display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 30px; }
+        .nav-item { padding: 8px 30px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+        .stat-small-card { background: var(--white); padding: 20px; border-radius: 25px; border: 1px solid #e0e0e0; }
+        .stat-small-card h4 { font-size: 16px; color: #000; margin-bottom: 10px; }
+
+        /* Main Grid */
+        .report-main-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Sidebar */
+        .report-sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .report-sidebar a { text-decoration: none; }
+        .side-btn {
+            background: var(--white); border: 1px solid #e0e0e0; padding: 15px;
+            border-radius: 20px; text-align: center; font-size: 16px;
+            font-weight: 500; cursor: pointer; color: #555;
+        }
+        .side-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+        /* Chart Area */
+        .chart-container {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            min-height: 400px;
+        }
+
+        .chart-wrapper { width: 300px; height: 300px; }
+        
+        /* Custom Legend List */
+        .legend-list { list-style: none; width: 300px; }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            border-radius: 2px;
+        }
+        .label-text { flex-grow: 1; }
+        .turn-text { color: #555; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div class="title-group">
+                <h2 style="font-size: 20px; margin: 0;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px; margin: 0;">Librarian Dashboard</p>
+            </div>
+        </div>
+        <button class="sign-out-btn">Sign out</button>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/librarian/dashboard" class="nav-item">Overview</a>
+        <a href="/librarian/borrowing-books" class="nav-item">Borrowing books</a>
+        <a href="/librarian/returning-books" class="nav-item">Returning books</a>
+        <a href="/librarian/manage-books" class="nav-item">Manage books</a>
+        <a href="/librarian/reports/borrow-return" class="nav-item active">Report</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-small-card"><h4>Borrows This Month</h4><p id="stat-borrows-month">0</p></div>
+        <div class="stat-small-card"><h4>Returns This Month</h4><p id="stat-returns-month">0</p></div>
+        <div class="stat-small-card"><h4>Late</h4><p id="stat-overdue-count">0</p></div>
+        <div class="stat-small-card"><h4>Fines Collected</h4><p id="stat-unpaid-fines">0</p></div>
+    </div>
+
+    <div class="report-main-grid">
+        <div class="report-sidebar">
+            <a href="/librarian/reports/borrow-return" class="side-btn">Borrow / return</a>
+            <a href="/librarian/reports/category" class="side-btn active">Category</a>
+            <a href="/librarian/reports/top-books" class="side-btn">Top Books</a>
+            <a href="/librarian/reports/late" class="side-btn">Late</a>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-wrapper">
+                <canvas id="categoryChart"></canvas>
+            </div>
+            
+            <ul class="legend-list" id="categoryLegend">
+                <!-- Legend will be populated by JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let categoryChart = null;
+
+        async function loadCategoryReport() {
+            try {
+                const res = await fetch('/api/reports/category', { credentials: 'include' });
+                const result = await res.json();
+
+                if (result.success) {
+                    const labels = result.labels || [];
+                    const data = result.data || [];
+                    const colors = result.colors || [];
+
+                    renderCategoryChart(labels, data, colors);
+                    renderLegend(labels, data, colors);
+                } else {
+                    console.error('Failed to load category report:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading category report:', error);
+            }
+        }
+
+        function renderCategoryChart(labels, data, colors) {
+            if (categoryChart) {
+                categoryChart.destroy();
+            }
+
+            const total = data.reduce((a, b) => a + b, 0);
+            const percentages = data.map(d => ((d / total) * 100).toFixed(1));
+
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels.map((label, idx) => `${label} (${percentages[idx]}%)`),
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return data[context.dataIndex] + ' books';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderLegend(labels, data, colors) {
+            const legendList = document.getElementById('categoryLegend');
+            legendList.innerHTML = '';
+
+            const total = data.reduce((a, b) => a + b, 0);
+
+            labels.forEach((label, index) => {
+                const count = data[index];
+                const percentage = ((count / total) * 100).toFixed(1);
+                const color = colors[index];
+
+                const li = document.createElement('li');
+                li.className = 'legend-item';
+                li.innerHTML = `
+                    <div class="color-box" style="background: ${color};"></div>
+                    <span class="label-text">${label}</span>
+                    <span class="turn-text">${count} (${percentage}%)</span>
+                `;
+                legendList.appendChild(li);
+            });
+        }
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadCategoryReport);
+    </script>
+    <script>
+        (async function(){
+            try{
+                const res = await fetch('/api/reports/summary?date_filter=monthly', {credentials:'include'});
+                const d = await res.json();
+                if(d.success){
+                    const r = d.report || {};
+                    document.getElementById('stat-borrows-month').textContent = r.books.total_borrowed || 0;
+                    document.getElementById('stat-returns-month').textContent = r.books.total_available || 0;
+                    document.getElementById('stat-overdue-count').textContent = r.borrows.overdue_borrows || 0;
+                    document.getElementById('stat-unpaid-fines').textContent = (r.fines.total_unpaid_fines || 0).toLocaleString();
+                }
+            }catch(e){console.error(e)}
+        })();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --accent-blue: #007bff;
+            --accent-green: #2ecc71;
+            --dark-black: #262626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        /* Header & Nav (Đồng nhất UI) */
+        .header-container {
+            background: var(--white); width: 100%; max-width: 1100px; padding: 15px 30px;
+            border-radius: 20px; border: 1px solid #e0e0e0; display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 10px 35px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; transition: 0.3s; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* --- Stats Row --- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 25px;
+        }
+
+        .stat-small-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 25px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stat-small-card h4 { font-size: 16px; color: #000; margin-bottom: 10px; }
+        .stat-small-card p { font-size: 14px; color: var(--gray-text); }
+
+        /* --- Main Report Content --- */
+        .report-main-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Sidebar Menu */
+        .report-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .report-sidebar a{
+            text-decoration: none;
+        }
+
+        .side-btn {
+            background: var(--white);
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #555;
+            transition: 0.2s;
+        }
+
+        .side-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .chart-container h3 { margin-bottom: 20px; font-size: 18px; }
+        canvas { max-height: 350px; width: 100% !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div>
+                <h2 style="font-size: 20px;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px;">Admin Dashboard</p>
+            </div>
+        </div>
+        <a href="/logout" class="sign-out-btn">Sign out</a>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/admin/dashboard" class="nav-item">Overview</a>
+        <a href="/admin/manage-users" class="nav-item">Manage User</a>
+        <a href="/admin/manage-books" class="nav-item">Manage Books</a>
+        <a href="/admin/reports/borrow-return" class="nav-item active">Reports</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-small-card"><h4>Active Borrows</h4><p id="stat-active">0</p></div>
+        <div class="stat-small-card"><h4>Total Returns</h4><p id="stat-returns">0</p></div>
+        <div class="stat-small-card"><h4>Overdue</h4><p id="stat-overdue">0</p></div>
+        <div class="stat-small-card"><h4>Fine Amount</h4><p id="stat-fines">0</p></div>
+    </div>
+
+    <div class="report-main-grid">
+        <div class="report-sidebar">
+            <div class="side-btn active">Borrow / return</div>
+            <a href="/admin/reports/category" class="side-btn">Category</a>
+            <a href="/admin/reports/top-books" class="side-btn">Top Books</a>
+            <a href="/admin/reports/late" class="side-btn">Late</a>
+        </div>
+
+        <div class="chart-container">
+            <h3>Books borrowing and returning chart</h3>
+            <canvas id="reportChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let reportChart = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+                loadBorrowReturnStats();
+                initializeChart();
+        });
+
+        // Load statistics from API
+        async function loadBorrowReturnStats() {
+            try {
+                const res = await fetch('/api/reports/summary?date_filter=monthly', {credentials: 'include'});
+                const data = await res.json();
+                if (!data.success) return;
+                const report = data.report || {};
+
+                document.getElementById('stat-active').textContent = report.borrows.active_borrows || 0;
+                document.getElementById('stat-overdue').textContent = report.borrows.overdue_borrows || 0;
+                document.getElementById('stat-fines').textContent = (report.fines.total_unpaid_fines || 0).toLocaleString();
+                document.getElementById('stat-returns').textContent = report.books.total_borrowed || 0;
+
+                // Update chart with series if present
+                if (report.series && Array.isArray(report.series)) {
+                    const months = report.series.map(s => s.month);
+                    const borrowsData = report.series.map(s => s.borrows);
+                    const returnsData = report.series.map(s => s.returns);
+                    if (reportChart) {
+                        reportChart.data.labels = months;
+                        reportChart.data.datasets[0].data = borrowsData;
+                        reportChart.data.datasets[1].data = returnsData;
+                        reportChart.update();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Initialize chart with monthly data
+        function initializeChart() {
+            const ctx = document.getElementById('reportChart').getContext('2d');
+            
+            // Initialize empty datasets; real data will be populated by API
+            const months = [];
+            const borrowsData = [];
+            const returnsData = [];
+
+            reportChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Books Borrow',
+                            data: borrowsData,
+                            backgroundColor: '#007bff',
+                            borderRadius: 5,
+                        },
+                        {
+                            label: 'Books Return',
+                            data: returnsData,
+                            backgroundColor: '#2ecc71',
+                            borderRadius: 5,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 600,
+                            ticks: { stepSize: 100 }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 20 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Sign out functionality
+        document.querySelector('.sign-out-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/logout';
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Detail Member</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #06222b;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        /* MAIN CARD */
+        .book-detail-card {
+            width: 100%;
+            max-width: 420px;
+            background: #f4f4f6;
+            border-radius: 28px;
+            padding: 22px;
+        }
+
+        /* BOOK NAME */
+        .book-header {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .book-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111;
+        }
+
+        .book-header p {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 4px;
+        }
+
+        /* BOOK ICON */
+        .book-icon-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .book-icon {
+            width: 110px;
+            height: 110px;
+            background: #ff9500;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+        }
+
+        /* DESCRIPTION */
+        .section {
+            margin-bottom: 16px;
+        }
+
+        .section label {
+            font-size: 13px;
+            color: #8e8e93;
+            font-weight: 500;
+        }
+
+        .section p {
+            font-size: 14px;
+            color: #111;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e5e5ea;
+            margin: 16px 0;
+        }
+
+        /* DETAILS GRID */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item label {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .detail-item p {
+            font-size: 14px;
+            color: #111;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* BUTTON */
+        .borrow-btn {
+            width: 100%;
+            background: #0a74ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .borrow-btn:hover {
+            background: #055fe0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="book-detail-card">
+
+    <!-- NAME -->
+    <div class="book-header">
+        <h2>Name Book</h2>
+        <p>Author</p>
+    </div>
+
+    <!-- ICON -->
+    <div class="book-icon-box">
+        <div class="book-icon">📖</div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="section">
+        <label>Description</label>
+        <p>
+            This is a short description of the book. It briefly introduces the
+            content, theme, or purpose of the book for readers.
+        </p>
+    </div>
+
+    <hr>
+
+    <!-- DETAILS -->
+    <div class="detail-grid">
+        <div class="detail-item">
+            <label>ISBN</label>
+            <p>978-3-16-148410-0</p>
+        </div>
+
+        <div class="detail-item">
+            <label>Category</label>
+            <p>Fiction</p>
+        </div>
+
+        <div class="detail-item">
+            <label>Publisher</label>
+            <p>Publisher Name</p>
+        </div>
+
+        <div class="detail-item">
+            <label>Year of publication</label>
+            <p>2023</p>
+        </div>
+
+        <div class="detail-item">
+            <label>Status</label>
+            <p>Available</p>
+        </div>
+
+        <div class="detail-item">
+            <label>Number</label>
+            <p>5</p>
+        </div>
+    </div>
+
+    <!-- BUTTON -->
+    <button class="borrow-btn">
+        Request to borrow book
+    </button>
+
+</div>
+
+</body>
+</html>
+
+

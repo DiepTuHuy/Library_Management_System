@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - Returning Books</title>
+    <style>
+        /* --- Base & Consistency --- */
+        :root {
+            --bg-body: #f1f3f6;
+            --white: #ffffff;
+            --gray-text: #8c8c8c;
+            --nav-bg: #d1d5db;
+            --danger-red: #ff4d4f;
+            --dark-black: #262626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-body); display: flex; flex-direction: column; align-items: center; padding: 30px; }
+
+        /* Header & Nav (Nhất quán với các trang trước) */
+        .header-container {
+            background: white;
+            width: 100%;
+            max-width: 1100px;
+            padding: 15px 30px;
+            border-radius: 25px; /* Bo góc lớn cho khung header */
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box { width: 55px; height: 55px; background: linear-gradient(#ffae3d, #ff7e01); border-radius: 15px; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; }
+        .sign-out-btn { background: var(--dark-black); color: white; border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .nav-bar { background: var(--nav-bg); padding: 5px; border-radius: 40px; display: flex; margin-bottom: 40px; }
+        .nav-item { padding: 8px 30px; text-decoration: none; color: #555; font-weight: 500; border-radius: 40px; }
+        .nav-item.active { background: white; color: black; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* --- Search Section --- */
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 30px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+            background: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input-wrapper svg {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #262626;
+        }
+
+        /* --- Active Slips List --- */
+        .list-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 30px;
+            padding: 20px 40px 10px 40px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .list-header h3 { font-size: 18px; font-weight: bold; }
+        .loan-duration-label { position: absolute; right: 40px; color: var(--gray-text); font-weight: 500; }
+
+        .slip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .slip-info { display: flex; flex: 1; justify-content: space-between; margin-right: 50px; }
+        .slip-info span { font-size: 16px; color: var(--gray-text); }
+        .slip-info b { color: #000; font-size: 16px; }
+
+        /* Status Badges */
+        .status-badge {
+            width: 180px;
+            padding: 8px 0;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .status-badge.overdue { background-color: var(--danger-red); }
+        .status-badge.current { background-color: var(--dark-black); }
+
+        .due-date {
+            display: block;
+            font-size: 12px;
+            color: var(--gray-text);
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .show-more {
+            text-align: center;
+            color: var(--gray-text);
+            padding: 15px 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-left">
+            <div class="logo-box">
+                <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="logo-box"/>
+            </div>
+            <div class="title-group">
+                <h2 style="font-size: 20px; margin: 0;">Library Management System</h2>
+                <p style="color: #8c8c8c; font-size: 14px; margin: 0;">Librarian Dashboard</p>
+            </div>
+        </div>
+        <a href="/logout">
+        <button class="sign-out-btn">Sign out</button>
+        </a>
+    </div>
+
+    <div class="nav-bar">
+        <a href="/librarian/dashboard" class="nav-item">Overview</a>
+        <a href="/librarian/borrowing-books" class="nav-item">Borrowing books</a>
+        <a href="/librarian/returning-books" class="nav-item active">Returning books</a>
+        <a href="/librarian/manage-books" class="nav-item">Manage books</a>
+        <a href="/librarian/reports/borrow-return" class="nav-item">Report</a>
+    </div>
+
+    <div class="search-row">
+        <div class="search-input-wrapper">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+            <input type="text" placeholder="Search by ID Islip, ISBN or ID Member">
+        </div>
+    </div>
+
+    <div class="list-container">
+        <div class="list-header">
+            <h3>Active Slips List</h3>
+            <span class="loan-duration-label">Loan Duration</span>
+        </div>
+
+        <div id="slip-list-container">
+            <!-- Dynamically populated from API -->
+        </div>
+
+        <div id="no-records" style="text-align: center; padding: 40px; color: #8c8c8c;">
+            No active borrow records found
+        </div>
+
+        <div id="show-more" class="show-more" style="display: none;">Show more</div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = '/api/borrows';
+        const ITEMS_PER_PAGE = 10;
+        let currentPage = 0;
+        let totalBorrows = [];
+        let displayedCount = 0;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadActiveBorrows();
+            setupSearch();
+            setupShowMore();
+        });
+
+        // Load active borrow records from API
+        async function loadActiveBorrows() {
+            try {
+                const response = await fetch(`${API_BASE}?include_returned=false`);
+                const data = await response.json();
+
+                if (data.success && data.borrows && data.borrows.length > 0) {
+                    totalBorrows = data.borrows;
+                    document.getElementById('no-records').style.display = 'none';
+                    displayBorrows();
+                } else {
+                    document.getElementById('slip-list-container').innerHTML = '';
+                    document.getElementById('show-more').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error loading borrows:', error);
+                document.getElementById('slip-list-container').innerHTML = 
+                    '<div style="color: #ff4d4f; padding: 20px;">Failed to load borrow records</div>';
+            }
+        }
+
+        // Display borrow records with pagination
+        function displayBorrows() {
+            const container = document.getElementById('slip-list-container');
+            const start = 0;
+            const end = ITEMS_PER_PAGE;
+            displayedCount = end;
+
+            container.innerHTML = '';
+
+            totalBorrows.slice(start, end).forEach(borrow => {
+                const slipElement = createSlipElement(borrow);
+                container.appendChild(slipElement);
+            });
+
+            // Show "Show more" button if there are more items
+            document.getElementById('show-more').style.display = 
+                totalBorrows.length > ITEMS_PER_PAGE ? 'block' : 'none';
+        }
+
+        // Create individual slip element
+        function createSlipElement(borrow) {
+            const div = document.createElement('div');
+            div.className = 'slip-item';
+            
+            // Calculate overdue status
+            const dueDate = new Date(borrow.due_date);
+            const today = new Date();
+            const overdueMs = today - dueDate;
+            const overdaysDays = Math.floor(overdueMs / (1000 * 60 * 60 * 24));
+            const isOverdue = overdaysDays > 0;
+            const statusText = isOverdue ? 
+                `${overdaysDays} day${overdaysDays !== 1 ? 's' : ''} overdue` : 
+                'Current';
+            const statusClass = isOverdue ? 'overdue' : 'current';
+            const dueDateStr = dueDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            });
+
+            div.innerHTML = `
+                <div class="slip-info">
+                    <div style="flex: 1;">
+                        <b>${borrow.book_title || 'Unknown'}</b><br>
+                        <span>${borrow.member_name || 'Unknown Member'}</span>
+                    </div>
+                    <span>ID: ${borrow.id || 'N/A'}</span>
+                </div>
+                <div class="status-column">
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                    <span class="due-date">Date due: ${dueDateStr}</span>
+                </div>
+                <button class="return-btn" data-borrow-id="${borrow.id}" style="
+                    background: #262626;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    margin-left: 20px;
+                ">Return</button>
+            `;
+
+            // Add return button handler
+            div.querySelector('.return-btn').addEventListener('click', function() {
+                processReturn(borrow.id, borrow.book_title, borrow.member_name);
+            });
+
+            return div;
+        }
+
+        // Process book return
+        async function processReturn(borrowId, bookTitle, memberName) {
+            if (!confirm(`Return "${bookTitle}" from ${memberName}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/${borrowId}/return`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`Book returned successfully${data.overdue ? ` (Overdue - Fine: ${data.fine} units)` : ''}`);
+                    loadActiveBorrows();
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error processing return:', error);
+                alert('Failed to process return');
+            }
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.querySelector('.search-input-wrapper input');
+            searchInput.addEventListener('keyup', function() {
+                const query = this.value.toLowerCase();
+                const filtered = totalBorrows.filter(borrow => 
+                    (borrow.book_title && borrow.book_title.toLowerCase().includes(query)) ||
+                    (borrow.member_name && borrow.member_name.toLowerCase().includes(query)) ||
+                    (borrow.id && borrow.id.toLowerCase().includes(query))
+                );
+
+                displayFilteredBorrows(filtered);
+            });
+        }
+
+        // Display filtered results
+        function displayFilteredBorrows(filtered) {
+            const container = document.getElementById('slip-list-container');
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="color: #8c8c8c; padding: 20px;">No matching records found</div>';
+                document.getElementById('show-more').style.display = 'none';
+                return;
+            }
+
+            filtered.forEach(borrow => {
+                const slipElement = createSlipElement(borrow);
+                container.appendChild(slipElement);
+            });
+
+            document.getElementById('show-more').style.display = 'none';
+        }
+
+        // Show more functionality
+        function setupShowMore() {
+            document.getElementById('show-more').addEventListener('click', function() {
+                const container = document.getElementById('slip-list-container');
+                const newEnd = displayedCount + ITEMS_PER_PAGE;
+
+                totalBorrows.slice(displayedCount, newEnd).forEach(borrow => {
+                    const slipElement = createSlipElement(borrow);
+                    container.appendChild(slipElement);
+                });
+
+                displayedCount = newEnd;
+
+                if (displayedCount >= totalBorrows.length) {
+                    this.style.display = 'none';
+                }
+            });
+        }
+
+        // Sign out functionality
+        document.querySelector('.sign-out-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/logout';
+        });
+    </script>
+
+</body>
+</html>
+

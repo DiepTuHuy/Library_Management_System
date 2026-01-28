@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Success</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5; /* Màu nền tối như trong hình */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .notification-card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 50px 30px;
+            border-radius: 40px; /* Bo góc cực đại */
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Logo Icon */
+        .logo-container {
+            width: 60px;
+            height: 60px;
+            background: #ff9500;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+        }
+
+        .logo-container span {
+            font-size: 30px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            color: #000;
+        }
+
+        /* Button Continue */
+        .btn-continue {
+            background-color: #007aff;
+            color: white;
+            width: 160px; /* Nút ngắn hơn so với khung */
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-continue:hover {
+            background-color: #0063d1;
+        }
+
+        .btn-continue:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="notification-card">
+        <img src="https://daisy.org/wp-content/uploads/2020/07/apple-books-app-icon.png" alt="Library Logo" class="login-logo"/>
+        </div>
+
+        <h1>Register Successful</h1>
+
+        <button class="btn-continue">Continue</button>
+    </div>
+
+</body>
+</html>
+
